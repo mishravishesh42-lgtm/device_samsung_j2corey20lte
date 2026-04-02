@@ -1,0 +1,19 @@
+# Android fstab file
+# Confirmed from /dev/block/bootdevice/by-name/ on SM-J260GU
+#
+# <mount point>  <fstype>   <device>                                         <flags>
+
+/system          ext4    /dev/block/bootdevice/by-name/system          flags=display="System";backup=1
+/vendor          ext4    /dev/block/bootdevice/by-name/vendor          flags=display="Vendor";backup=1
+/odm             ext4    /dev/block/bootdevice/by-name/odm             flags=display="ODM"
+/data            ext4    /dev/block/bootdevice/by-name/userdata        flags=display="Data";wipeingui;forceencrypt=footer
+/cache           ext4    /dev/block/bootdevice/by-name/cache           flags=display="Cache";wipeingui
+/efs             ext4    /dev/block/bootdevice/by-name/efs             flags=display="EFS";backup=1;wipeingui
+/persist         ext4    /dev/block/bootdevice/by-name/persist         flags=display="Persist"
+/boot            emmc    /dev/block/bootdevice/by-name/boot            flags=display="Boot"
+/recovery        emmc    /dev/block/bootdevice/by-name/recovery        flags=display="Recovery"
+/misc            emmc    /dev/block/bootdevice/by-name/misc            flags=display="Misc"
+/modem           emmc    /dev/block/bootdevice/by-name/modem           flags=display="Modem";backup=1
+/param           emmc    /dev/block/bootdevice/by-name/param           flags=display="Param"
+/external_sd     vfat    /dev/block/mmcblk1p1 /dev/block/mmcblk1      flags=display="MicroSD";storage;wipeingui;removable
+/usb-otg         vfat    /dev/block/sda1 /dev/block/sda               flags=display="USB OTG";storage;wipeingui;removable

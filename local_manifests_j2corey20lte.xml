@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <!--
+    Local manifest for TWRP build - SM-J260GU (j2corey20lte)
+    Place this file at: .repo/local_manifests/j2corey20lte.xml
+    Replace YOUR_GITHUB with your actual GitHub username
+  -->
+  <remote name="github"
+          fetch="https://github.com" />
+
+  <project name="YOUR_GITHUB/device_samsung_j2corey20lte"
+           path="device/samsung/j2corey20lte"
+           remote="github"
+           revision="main" />
+</manifest>

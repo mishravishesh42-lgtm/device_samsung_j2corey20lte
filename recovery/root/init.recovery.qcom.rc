@@ -1,0 +1,65 @@
+# Copyright (C) 2024 The Android Open Source Project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# init.recovery.qcom.rc for SM-J260GU (j2corey20lte)
+# SoC: Snapdragon 425 (msm8917), Board: msm8937
+
+on early-init
+    write /proc/sys/kernel/printk "3 3 1 7"
+
+on init
+    # Storage symlinks
+    symlink /dev/block/bootdevice/by-name/boot /dev/block/boot
+    symlink /dev/block/bootdevice/by-name/recovery /dev/block/recovery
+    symlink /dev/block/bootdevice/by-name/system /dev/block/system
+    symlink /dev/block/bootdevice/by-name/userdata /dev/block/userdata
+    symlink /dev/block/bootdevice/by-name/cache /dev/block/cache
+    symlink /dev/block/bootdevice/by-name/efs /dev/block/efs
+    symlink /dev/block/bootdevice/by-name/persist /dev/block/persist
+
+on fs
+    wait /dev/block/bootdevice
+
+    # Mount EFS for IMEI backup
+    mkdir /efs 0771 radio radio
+    mount ext4 /dev/block/bootdevice/by-name/efs /efs nosuid nodev noatime
+
+    # Mount persist
+    mkdir /persist 0771 root system
+    mount ext4 /dev/block/bootdevice/by-name/persist /persist nosuid nodev noatime
+
+on post-fs
+    # Fix EFS permissions
+    chown radio radio /efs
+    chmod 0771 /efs
+
+on boot
+    # Synaptics touchscreen (synaptics_rmi4_i2c @ i2c 2-004b)
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 04E8
+    write /sys/class/android_usb/android0/idProduct 6860
+    write /sys/class/android_usb/android0/functions mtp,adb
+    write /sys/class/android_usb/android0/iManufacturer samsung
+    write /sys/class/android_usb/android0/iProduct SM-J260GU
+    write /sys/class/android_usb/android0/enable 1
+
+    # Brightness
+    write /sys/class/leds/lcd-backlight/brightness 162
+
+on property:ro.debuggable=1
+    write /sys/class/android_usb/android0/enable 1
+
+# USB MTP
+service usbd /system/bin/usbd
+    class main
+    user root
+    group root
+
+# Samsung Download Mode
+on property:sys.usb.config=download
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 04E8
+    write /sys/class/android_usb/android0/idProduct 685D
+    write /sys/class/android_usb/android0/functions diag
+    write /sys/class/android_usb/android0/enable 1
